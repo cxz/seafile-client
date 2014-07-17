@@ -1,7 +1,7 @@
 TARGET = seafile_shell_ext.dll
 DLL_PATH = $(shell pwd -W | sed -e 's|/|\\\\\\\\|g')\\\\$(TARGET)
 
-MODULES = ext.cpp shell-ext.cpp class-factory.cpp context-menu.cpp
+MODULES = ext.cpp shell-ext.cpp class-factory.cpp context-menu.cpp log.cpp
 
 OBJECTS = ${MODULES:%.cpp=%.o}
 

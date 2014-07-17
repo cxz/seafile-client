@@ -26,7 +26,7 @@ CShellExt::~CShellExt()
 
 STDMETHODIMP CShellExt::QueryInterface(REFIID riid, LPVOID FAR *ppv)
 {
-    if(ppv == 0)
+    if (ppv == 0)
         return E_POINTER;
 
     *ppv = NULL;

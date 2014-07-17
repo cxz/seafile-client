@@ -1,8 +1,10 @@
 
 #include "ext-common.h"
-// #include "guids.h"
-// #include "shell-ext.h"
-// #include "class-factory.h"
+#include "class-factory.h"
+#include "guids.h"
+#include "log.h"
+
+#include "shell-ext.h"
 
 volatile LONG       g_cRefThisDll = 0;              ///< reference count of this DLL.
 HINSTANCE           g_hmodThisDll = NULL;           ///< handle to this DLL itself.
@@ -18,6 +20,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /* lpReserved */)
     // because those functions call LoadLibrary() indirectly through malloc().
     // And LoadLibrary() inside DllMain() is not allowed and can lead to unexpected
     // behavior and even may create dependency loops in the dll load order.
+    Logger::debug("DllMain called");
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         if (g_hmodThisDll == NULL)
@@ -55,47 +58,18 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvOut)
         return E_POINTER;
     *ppvOut = NULL;
 
-    // FileState state = FileStateInvalid;
-    // if (IsEqualIID(rclsid, CLSID_TortoiseSVN_UPTODATE))
-    //     state = FileStateVersioned;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_MODIFIED))
-    //     state = FileStateModified;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_CONFLICTING))
-    //     state = FileStateConflict;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_UNCONTROLLED))
-    //     state = FileStateUncontrolled;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_DROPHANDLER))
-    //     state = FileStateDropHandler;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_DELETED))
-    //     state = FileStateDeleted;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_READONLY))
-    //     state = FileStateReadOnly;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_LOCKED))
-    //     state = FileStateLockedOverlay;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_ADDED))
-    //     state = FileStateAddedOverlay;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_IGNORED))
-    //     state = FileStateIgnoredOverlay;
-    // else if (IsEqualIID(rclsid, CLSID_TortoiseSVN_UNVERSIONED))
-    //     state = FileStateUnversionedOverlay;
+    if (IsEqualIID(rclsid, CLSID_SEAFILE_SHELLEXT)) {
+        // apr_initialize();
+        // svn_dso_initialize2();
+        // g_SVNAdminDir.Init();
+        // g_cAprInit++;
 
-    // if (state != FileStateInvalid)
-    // {
-    //     apr_initialize();
-    //     svn_dso_initialize2();
-    //     g_SVNAdminDir.Init();
-    //     g_cAprInit++;
-
-    //     CShellExtClassFactory *pcf = new (std::nothrow) CShellExtClassFactory(state);
-    //     if (pcf == NULL)
-    //         return E_OUTOFMEMORY;
-    //     // refcount currently set to 0
-    //     const HRESULT hr = pcf->QueryInterface(riid, ppvOut);
-    //     if(FAILED(hr))
-    //         delete pcf;
-    //     return hr;
-    // }
+        CShellExtClassFactory *pcf = new CShellExtClassFactory;
+        const HRESULT hr = pcf->QueryInterface(riid, ppvOut);
+        if(FAILED(hr))
+            delete pcf;
+        return hr;
+    }
 
     return CLASS_E_CLASSNOTAVAILABLE;
-
 }

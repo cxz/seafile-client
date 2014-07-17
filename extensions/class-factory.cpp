@@ -69,10 +69,7 @@ STDMETHODIMP CShellExtClassFactory::CreateInstance(LPUNKNOWN pUnkOuter,
     // QueryInterface with IID_IShellExtInit--this is how shell extensions are
     // initialized.
 
-    CShellExt* pShellExt = new CShellExt();  //Create the CShellExt object
-
-    if (NULL == pShellExt)
-        return E_OUTOFMEMORY;
+    CShellExt* pShellExt = new CShellExt; // Create the CShellExt object
 
     const HRESULT hr = pShellExt->QueryInterface(riid, ppvObj);
     if(FAILED(hr))
