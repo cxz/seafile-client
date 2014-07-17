@@ -35,18 +35,18 @@ STDMETHODIMP CShellExt::QueryInterface(REFIID riid, LPVOID FAR *ppv)
     {
         *ppv = static_cast<LPSHELLEXTINIT>(this);
     }
-    else if (IsEqualIID(riid, IID_IContextMenu))
-    {
-        *ppv = static_cast<LPCONTEXTMENU>(this);
-    }
-    else if (IsEqualIID(riid, IID_IContextMenu2))
-    {
-        *ppv = static_cast<LPCONTEXTMENU2>(this);
-    }
-    else if (IsEqualIID(riid, IID_IContextMenu3))
-    {
-        *ppv = static_cast<LPCONTEXTMENU3>(this);
-    }
+    // else if (IsEqualIID(riid, IID_IContextMenu))
+    // {
+    //     *ppv = static_cast<LPCONTEXTMENU>(this);
+    // }
+    // else if (IsEqualIID(riid, IID_IContextMenu2))
+    // {
+    //     *ppv = static_cast<LPCONTEXTMENU2>(this);
+    // }
+    // else if (IsEqualIID(riid, IID_IContextMenu3))
+    // {
+    //     *ppv = static_cast<LPCONTEXTMENU3>(this);
+    // }
     else
     {
         return E_NOINTERFACE;

@@ -1,3 +1,5 @@
+LIBRARY seafile_shell_ext
 EXPORTS
-    DllCanUnloadNow     PRIVATE
-    DllGetClassObject   PRIVATE
+DllMain
+DllCanUnloadNow PRIVATE
+DllGetClassObject PRIVATE
