@@ -17,7 +17,7 @@
 #include "seafile-applet.h"
 #include "QtAwesome.h"
 #include "open-local-helper.h"
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
 #include "application.h"
 #endif
 
@@ -27,15 +27,23 @@ int main(int argc, char *argv[])
 {
     int ret = 0;
     char c;
-#if defined(Q_WS_MAC)
+#if QT_VERSION < QT_VERSION_CHECK(4, 8, 6) && defined(Q_OS_MAC)
+    // Mac OS X 10.9 (mavericks) font issue,
+    // fixed in qt4.8.6 and qt5.x
+    // https://bugreports.qt-project.org/browse/QTBUG-32789
     if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 ) {
-        // fix Mac OS X 10.9 (mavericks) font issue
-        // https://bugreports.qt-project.org/browse/QTBUG-32789
         QFont::insertSubstitution(".Lucida Grande UI", "Lucida Grande");
-        // https://bugreports.qt-project.org/browse/QTBUG-40833
+    }
+#endif // QT_VERSION_CHECK(4, 8, 6)
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 3, 2) && defined(Q_OS_MAC)
+    // Text in buttons and drop-downs looks misaligned in osx 10.10,
+    // fixed in qt5.3.2
+    // https://bugreports.qt-project.org/browse/QTBUG-40833
+    if ( QSysInfo::MacintoshVersion > QSysInfo::MV_10_8 ) {
         QFont::insertSubstitution(".Helvetica Neue DeskInterface", "Helvetica Neue");
     }
-#endif
+#endif // QT_VERSION_CHECK(5, 3, 2)
 
 #if !GLIB_CHECK_VERSION(2, 35, 0)
     g_type_init();
@@ -44,10 +52,17 @@ int main(int argc, char *argv[])
     g_thread_init(NULL);
 #endif
 
-#if defined(Q_WS_MAC)
+#if defined(Q_OS_MAC)
     Application app(argc, argv);
 #else
     QApplication app(argc, argv);
+#endif
+
+    // enable builtin retina mode for MAC
+    // http://blog.qt.digia.com/blog/2013/04/25/retina-display-support-for-mac-os-ios-and-x11/
+    // https://qt.gitorious.org/qt/qtbase/source/a3cb057c3d5c9ed2c12fb7542065c3d667be38b7:src/gui/image/qicon.cpp#L1028-1043
+#if QT_VERSION >= QT_VERSION_CHECK(5, 1, 0) && defined(Q_OS_MAC)
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
 
     QDir::setCurrent(QApplication::applicationDirPath());
@@ -55,7 +70,7 @@ int main(int argc, char *argv[])
 
     // initialize i18n
     QTranslator qtTranslator;
-#if defined(Q_WS_WIN)
+#if defined(Q_OS_WIN32)
     qtTranslator.load("qt_" + QLocale::system().name());
 #else
     qtTranslator.load("qt_" + QLocale::system().name(),
@@ -64,7 +79,7 @@ int main(int argc, char *argv[])
     app.installTranslator(&qtTranslator);
 
     QTranslator myappTranslator;
-#if QT_VERSION >= 0x040800 && !defined(Q_WS_MAC)
+#if QT_VERSION >= QT_VERSION_CHECK(4, 8, 0) && !defined(Q_OS_MAC)
     QLocale loc = QLocale::system();
     QString lang = QLocale::languageToString(loc.language());
 

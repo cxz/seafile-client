@@ -10,8 +10,11 @@ matrix:
         CFLAGS="-Wall -Wextra -Wsign-compare -Wno-long-long -Wno-unused-parameter -pedantic -fcolor-diagnostics"
         CXXFLAGS="-Woverloaded-virtual $CFLAGS"
 before_install:
+ - sudo add-apt-repository -y ppa:george-edison55/cmake-precise
+ - sudo add-apt-repository -y ppa:beineri/opt-qt54
  - sudo apt-get update -qq
- - sudo apt-get install -qq valac uuid-dev libevent-dev libarchive-dev re2c libjansson-dev libqt4-dev
+ - sudo apt-get install -qq valac uuid-dev libevent-dev re2c libjansson-dev cmake libqt4-dev
+ - sudo apt-get install -qq qt54base qt54translations qt54tools
  - git clone --depth=1 --branch=master git://github.com/haiwen/libsearpc.git deps/libsearpc
  - git clone --depth=1 --branch=master git://github.com/haiwen/ccnet.git deps/ccnet
  - git clone --depth=1 --branch=master git://github.com/haiwen/seafile.git deps/seafile
@@ -28,7 +31,13 @@ script:
  - cmake -DBUILD_TESTING=on .
  - make -j8
  - make test
+ - git clean -xfd
+ - source /opt/qt54/bin/qt54-env.sh
+ - cmake . -DBUILD_TESTING=on -DUSE_QT5=ON
+ - make -j8
+ - make test
 notifications:
   email:
     recipients:
       - linshuai2012@gmail.com
+      - rwindz0@gmail.com

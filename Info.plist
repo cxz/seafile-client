@@ -24,6 +24,8 @@
 	<string>Copyright © 2014 海文互知. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>NSHighResolutionCapable</key>
+	<string>True</string>
 	<key>CFBundleName</key>
 	<string>Seafile</string>
 </dict>

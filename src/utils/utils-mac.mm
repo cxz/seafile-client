@@ -3,30 +3,6 @@
 #include "utils-mac.h"
 #include <QString>
 
-static bool checked = false;
-static double scaleFactor = 1.0;
-inline static void checkFactor() {
-    if (!checked){
-#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7)
-        if ([[NSScreen mainScreen] respondsToSelector: @selector(backingScaleFactor)])
-            scaleFactor = [[NSScreen mainScreen] backingScaleFactor];
-#else
-        scaleFactor = 1.0;
-#endif
-        checked = true;
-    }
-}
-
-int __mac_isHiDPI() {
-    checkFactor();
-    return (scaleFactor > 1.0);
-}
-
-double __mac_getScaleFactor() {
-    checkFactor();
-    return scaleFactor;
-}
-
 //TransformProcessType is not encouraged to use, aha
 //Sorry but not functional for OSX 10.7
 void __mac_setDockIconStyle(bool hidden) {
