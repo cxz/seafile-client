@@ -79,6 +79,10 @@ while [ $# -ge 1 ]; do
             popd
             ;;
 
+        "dump_syms" )
+            dump_syms ${top_dir}/${target}.app/Contents/MacOS/seafile-applet > app.syms
+            ;;
+
         "otool" )
             echo "macdeployqt ${target}.app"
             macdeployqt ${target}.app

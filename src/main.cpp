@@ -10,6 +10,7 @@
 #include <glib-object.h>
 #include <cstdio>
 
+#include "crash-handler.h"
 #include "utils/utils.h"
 #include "utils/process.h"
 #include "utils/uninstall-helpers.h"
@@ -49,6 +50,10 @@ int main(int argc, char *argv[])
 #endif
 
     QDir::setCurrent(QApplication::applicationDirPath());
+
+    // install breakpad, a crash handler
+    Breakpad::CrashHandler::instance()->Init(QDir(defaultCcnetDir()).absoluteFilePath("dump"));
+
     app.setStyle(new SeafileProxyStyle());
 
     // initialize i18n

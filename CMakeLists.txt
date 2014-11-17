@@ -201,6 +201,7 @@ SET(seafile_client_sources
   src/traynotificationmanager.cpp
   src/certs-mgr.cpp
   src/seahub-notifications-monitor.cpp
+  src/crash-handler.cpp
   src/api/api-client.cpp
   src/api/api-request.cpp
   src/api/api-error.cpp
@@ -274,6 +275,7 @@ INCLUDE_DIRECTORIES(
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_BINARY_DIR}
   ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/third_party/breakpad
   ${PROJECT_SOURCE_DIR}/third_party/QtAwesome
   ${QT_INCLUDE_DIR}
   ${QT_QTNETWORK_INCLUDE_DIR}
@@ -402,6 +404,13 @@ TARGET_LINK_LIBRARIES(seafile-applet
   ${LIBSEAFILE_LIBRARIES}
   ${EXTRA_LIBS}
 )
+
+## breakpad
+ADD_SUBDIRECTORY(third_party/breakpad)
+TARGET_LINK_LIBRARIES(seafile-applet
+  breakpad_s
+  )
+
 
 ## QtBus
 IF (${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR ${CMAKE_SYSTEM_NAME} MATCHES "BSD")
